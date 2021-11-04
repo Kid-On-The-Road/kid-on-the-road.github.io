@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "知行合一"
-subtitle: "心学"
+subtitle: "博客文档编写语法示例"
 categories: 致良知
 tags: [知行合一]
 author: "Kid-On-The-Road"

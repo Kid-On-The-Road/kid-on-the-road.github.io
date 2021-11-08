@@ -1749,4 +1749,214 @@ Document Object Model 文档对象模型
 | nextSibling     | 得到下一个兄弟节点       |
 | previousSibling | 得到上一个兄弟节点       |
 
+## 正则表达式
+
+### 效果
+
+![1552051283134](https://raw.githubusercontent.com/Kid-On-The-Road/Resources/main/笔记图片/JSP正则&bootstrap/1552051283134.png)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>验证手机号码</title>
+</head>
+<body>
+手机号：
+<input type="text" id="tel"/>
+<input type="button" id="btn" value="验证"/>
+<script type="text/javascript">
+    /*
+    如果验证通过，返回true，否则返回false。
+     */
+    function checkPhone() {
+        /*
+        1. 必须全是数字
+        2. 必须是11位
+        3. 以1开头，第2个数字不能是012，第3个以后的数字任意
+         */
+        //1. 得到文本框输入的值
+        var tel = document.getElementById("tel").value.trim();
+        //2. 使用上面的规则进行判断
+        if (isNaN(tel)) {
+            return false;
+        }
+        if (tel.length != 11) {
+            return false;
+        }
+        if (tel.charAt(0) != '1') {
+            return false;
+        }
+        if (tel.charAt(1) == '0' || tel.charAt(1) == '1' || tel.charAt(1) == '2') {
+            return false;
+        }
+        return true;
+    }
+
+    document.getElementById("btn").onclick = function () {
+        if (checkPhone()) {
+            alert("验证通过");
+        }
+        else {
+            alert("验证失败");
+        }
+    };
+</script>
+</body>
+</html>
+```
+
+
+
+### 正则表达式作用
+
+1. 简化字符串的验证，判断一个字符串是否匹配指定的规则
+2. 查询和搜索字符串的作用
+
+### 规则
+
+| 符号   | 作用                                                     |
+| ------ | -------------------------------------------------------- |
+| [a-z]  | []表示1个字符，-表示一个范围。匹配所有的小写字母         |
+| [xyz]  | 匹配x或y或z                                              |
+| [^xyz] | 在中括号中加上^的符号表示取反，匹配除了xyz之外的任意字符 |
+| \d     | 表示数字                                                 |
+| \w     | 表示单词，相当于这些字符：[a-zA-Z0-9_]                   |
+| .      | 匹配任意的字符，通配符。如果要匹配点号，必须要转义：\\.  |
+| ()     | 代表一组，表示后面的操作符对这一组进行操作               |
+| {n}    | 前面的字符出现n次   n==x                                 |
+| {n,}   | 前面的字符出现大于等于n次  n<=x                          |
+| {n,m}  | 前面的字符出现n到m之间的次数，包头包尾  n<=x<=m          |
+| +      | 前面的字符出现1到n次                                     |
+| *      | 前面的字符出现0到n次                                     |
+| ?      | 前面的字符出现0到1次                                     |
+| \|     | 或者，几个字符串选择1个                                  |
+| ^      | 在最前面表示匹配开头                                     |
+| $      | 在最后面表示匹配结束                                     |
+
+### 举例
+
+| 正则表达式 | 匹配字符串                                    |
+| ---------- | --------------------------------------------- |
+| \d{3}      | 匹配3个数字，在JS中模糊匹配，在Java中精确匹配 |
+| ^\d{3}     | 匹配以3个数字开头的字符串                     |
+| \d{3}$     | 匹配以3个数字结尾的字符串                     |
+| ^\d{3}$    | 精确匹配3个数字                               |
+| ab{2}      | 匹配abb                                       |
+| ab{2,}     | 匹配abb, abbb, abbbbbbbbbbbbbbbb              |
+| ab{3,5}    | abbb, abbbb,abbbbb                            |
+| ab+        | ab, abbbbb                                    |
+| ab\*       | a,  ab,  abbbbbbbbbb                          |
+| ab?        | a, ab                                         |
+| hi\|hello  | hi或hello中一个                               |
+| (b\|cd)ef  | 匹配bef或cdef                                 |
+| ^.{3}$     | 匹配任意的3个字符                             |
+| \[^a-zA-Z] | 除了字母之外的字符                            |
+
+### 使用正则表达式的实现
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>验证手机号码</title>
+</head>
+<body>
+手机号：
+<input type="text" id="tel"/>
+<input type="button" id="btn" value="验证"/>
+<script type="text/javascript">
+    /*
+    如果验证通过，返回true，否则返回false。
+     */
+    function checkPhone() {
+        /*
+        1. 必须全是数字
+        2. 必须是11位
+        3. 以1开头，第2个数字不能是012，第3个以后的数字任意
+         */
+        //1. 得到文本框输入的值
+        var tel = document.getElementById("tel").value.trim();
+        //调用正则表达式的方法，如果字符串匹配正则表达式就返回true，否则就返回false
+        return /^1[3456789]\d{9}$/.test(tel);
+    }
+
+    document.getElementById("btn").onclick = function () {
+        if (checkPhone()) {
+            alert("验证通过");
+        } else {
+            alert("验证失败");
+        }
+    };
+</script>
+</body>
+</html>
+```
+
+## <font color="red">创建正则表达式</font>
+
+### 代码
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正则表达式创建</title>
+</head>
+<body>
+<script type="text/javascript">
+    //字符串，在JS中默认是模糊匹配
+    var str = "1235";
+    //方式一：正则表达式，找3个数字(正则表达式是做为字符串参数出现的，可以定义成变量，可以进行字符串拼接，相对更加灵活。但\等字符需要转义。)
+    //var reg = new RegExp("^\\d{3}$");
+
+    //方式二：(本身是一个正则表达式对象，\等字符不需要转义。)
+    var reg = /^\d{4}$/;
+    //test方法用来判断是否匹配，匹配就返回true
+    document.write("是否匹配：" + reg.test(str) + "<br/>");
+</script>
+</body>
+</html>
+```
+
+### 匹配模式
+
+#### 创建方式
+
+```javascript
+//i:忽略大小写
+new RegExp("正则表达式","匹配模式")
+
+/正则表达式/匹配模式
+```
+
+### 代码
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正则表达式匹配模式</title>
+</head>
+<body>
+<script type="text/javascript">
+    //创建字符串
+    var str = "CAT";
+    //创建正则表达式并且指定匹配模式 (Regular Expression 正则表达式)
+    //var reg = new RegExp("cat","i");  //忽略大小写
+
+    var reg = /cat/i;  //匹配模式
+
+    //调用test方法判断
+    var b = reg.test(str);
+    //输出判断结果
+    document.write(b + "<br/>");
+</script>
+</body>
+</html>
+```
 

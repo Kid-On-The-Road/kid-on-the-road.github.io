@@ -9,6 +9,8 @@ meta: ""
 
 ---
 
+
+
 ## 概述
 
 ​	在1995年时，由Netscape公司在网景导航者浏览器上首次设计实现而成。因为Netscape与Sun合作，Netscape管理层希望它外观看起来像Java，因此取名为JavaScript。

@@ -1,0 +1,105 @@
+{
+  "main": {
+    "id": "64b1ddc93664e8ae",
+    "type": "split",
+    "children": [
+      {
+        "id": "dab180978e8c04fc",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "2021-11-6-Linux.md",
+            "mode": "preview"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "b70d69f8b040d60c",
+    "type": "split",
+    "children": [
+      {
+        "id": "2f341c2709b6d828",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "19acff9d26901fd6",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "d92aa01a28c82fd9",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "f9e2f49dc302365c",
+    "type": "split",
+    "children": [
+      {
+        "id": "8d3b3cfe339818b6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "10c4b5e3c0514148",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "2021-11-6-Linux.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "f3b974e9fffc6181",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "2021-11-6-Linux.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "dab180978e8c04fc",
+  "lastOpenFiles": [
+    "2021-11-6-Linux.md",
+    "2021-11-29-欧拉操作系统.md",
+    "2021-11-18-FineReport.md"
+  ]
+}

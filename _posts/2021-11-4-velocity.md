@@ -112,7 +112,7 @@ Hello $_var2 World!
 
 ### 引用
 
-#### 变量
+>变量
 
 ```javascript
 变量名称开头可以是如下几种：
@@ -126,7 +126,7 @@ Hello $_var2 World!
 #set( $foo = "bar" )
 ```
 
-#### 属性
+>属性
 
 ```javascript
 //含义一：$customer.Address查询被customer标识的哈希表并返回和它相关联的Address的值。
@@ -152,7 +152,7 @@ get(“Address”)
 isAddress()
 ```
 
-#### 方法
+>方法
 
 ```javascript
 //$customer.Address 引用和 $customer.getAddress()方法的引用效果是一样的
@@ -179,7 +179,7 @@ $sun.setPlanets('Mercury')
 $sun.setPlanets()
 ```
 
-#### 渲染
+>渲染
 
 每一个引用的值(变量，属性，或者方法)都被转换为一个字符串并作为最终的输出。、
 
@@ -188,7 +188,7 @@ $sun.setPlanets()
 $foo
 ```
 
-#### 索引标识符
+>索引标识符
 
 - 使用`$foo[0]` 的符号形式或$foo.get(0)能够访问被定义的索引对象。
 
@@ -213,7 +213,7 @@ $foo["apple"][4]
 
 ==注意==：指定的元素被赋值给定的值。Velocity 尝试第一次 ‘set’ 方法在元素上, 然后通过’put’ 来进行赋值.
 
-#### 正式引用标识符
+> 正式引用标识符
 
 ```
 ${mudSlinger}
@@ -233,7 +233,7 @@ ${vice}maniac
 $aaamaniac
 ```
 
-#### 静态引用标识符
+> 静态引用标识符
 
 ```javascript
 //$email未被定义输出为$email
@@ -345,7 +345,7 @@ The result of the second query is bill
 
 ### 条件语句
 
-#### If / ElseIf / Else
+> If / ElseIf / Else
 
 ```javascript
 //*#if*指令可以包含一段文本当生成Web网页
@@ -369,7 +369,7 @@ The result of the second query is bill
 #end
 ```
 
-#### 关系和逻辑操作符
+> 关系和逻辑操作符
 
 字符形式的逻辑运算符*eq*, *ne*, *and*, *or*, *not*, *gt*, *ge*, *lt*, 和*le*.
 
@@ -727,11 +727,11 @@ runtime.log.invalid.references=  true
 
 ### 获取字面量
 
-#### 通用
+> 通用
 
 VTL 标识符一直都是以大写或者小写的字母开始的, 所以 $2.50 不会被错误引用.
 
-#### 屏蔽VTL中的引用
+> 屏蔽VTL中的引用
 
 ```javascript
 //定义$email
@@ -752,7 +752,7 @@ $moon = $foo
 //输出结果为: $moon = gibbous — $moon将作为字符输出而$foo的地方将输出gibbous.
 ```
 
-#### 转义不可用VTL引用
+> 转义不可用VTL引用
 
 ```javascript
 //不想把${my:invalid:non:reference}当做引用
@@ -763,7 +763,7 @@ ${D}{my:invalid:non:reference}
 ${esc.d}{my:invalid:non:reference}
 ```
 
-#### 转义VTL指令
+> 转义VTL指令
 
 - 通过反斜杠(“\”)字符屏蔽 VTL 指令
 
@@ -803,7 +803,7 @@ ${esc.d}{my:invalid:non:reference}
 \ Vyacheslav Ganelin\
 ```
 
-### 格式化问题
+> 格式化问题
 
 ```javascript
 //格式一
@@ -827,7 +827,7 @@ $a
 
 ### 其他的特性和杂记
 
-#### 算术操作
+> 算术操作
 
 加减乘数的使用:
 
@@ -844,7 +844,7 @@ $a
 #set( $foo = $bar % 5 )
 ```
 
-#### 范围操作符
+> 范围操作符
 
 范围操作符能够结合着 *#set* 和 *#foreach* 语句使用. 用它能够产生一个整数数组,语法结果如下:
 

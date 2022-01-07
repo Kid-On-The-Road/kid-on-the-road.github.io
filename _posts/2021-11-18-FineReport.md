@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "FineReport"
-subtitle: "FineReport报表软件"
+subtitle: "FineReport文档"
 categories: 报表
-tags: [报表]
+tags: [FineReport]
 author: "Kid-On-The-Road"
 meta: ""
 

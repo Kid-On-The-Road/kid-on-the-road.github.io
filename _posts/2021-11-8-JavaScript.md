@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "JavaScript"
-subtitle: "JavaScript语法、使用"
+subtitle: "JavaScript文档"
 categories: 前端
-tags: [JavaScript,语法]
+tags: [JavaScript]
 author: "Kid-On-The-Road"
 meta: ""
 

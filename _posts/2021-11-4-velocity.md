@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "velocity"
-subtitle: "velocity(vm)模板引擎"
+subtitle: "velocity文档"
 categories: 前端
 tags: [velocity]
 author: "Kid-On-The-Road"

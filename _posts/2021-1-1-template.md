@@ -2,7 +2,7 @@
 layout: post
 title: "模板"
 subtitle: "博客文档编写语法示例"
-categories: Template
+categories: 模板
 tags: [Template]
 author: "Kid-On-The-Road"
 meta: ""

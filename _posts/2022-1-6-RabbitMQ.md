@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "RabbitMQ"
-subtitle: "RabbitMQ安装使用"
-categories: RabbitMQ
-tags: [RabbitMQ,中间件]
+subtitle: "RabbitMQ文档"
+categories: 中间件
+tags: [RabbitMQ]
 author: "Kid-On-The-Road"
 meta: ""
 

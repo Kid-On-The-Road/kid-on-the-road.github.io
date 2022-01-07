@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "Bootstrap"
-subtitle: "Bootstrap框架使用"
-categories: 前端
-tags: [Bootstrap,框架]
+subtitle: "Bootstrap文档"
+categories: 前端框架
+tags: [Bootstrap]
 author: "Kid-On-The-Road"
 meta: ""
 

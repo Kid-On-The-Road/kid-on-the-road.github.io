@@ -860,6 +860,105 @@ public class RedisTemplateTest {
 }
 ```
 
+### 整合RabbitMQ
+
+#### 依赖
+
+```xml
+<dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-amqp</artifactId>
+   <version>2.5.2</version>
+</dependency>
+```
+
+#### 配置
+
+```yml
+spring:
+  rabbitmq:
+    host: 192.168.88.7
+    username: seckill
+    password: seckill
+    virtual-host: /seckill
+    listener:
+      simple:
+        acknowledge-mode: manual #手动确认
+        concurrency: 1 #指定最小的消费者数量
+        max-concurrency: 1 #指定最大的消费者数量
+    template:
+      retry:
+        enabled: true
+        initial-interval: 10000ms
+        max-interval: 80000ms
+        multiplier: 2
+    publisher-confirm-type: correlated
+    publisher-returns: true #消息发送到交换机确认机制,是否确认回调
+```
+
+```tex
+template：有关AmqpTemplate的配置
+retry：失败重试
+enabled：开启失败重试
+initial-interval：第一次重试的间隔时长
+max-interval：最长重试间隔，超过这个间隔将不再重试
+multiplier：下次重试间隔的倍数，此处是2即下次重试间隔是上次的2倍
+exchange：缺省的交换机名称，此处配置后，发送消息如果不指定交换机就会使用这个
+publisher-confirms：生产者确认机制，确保消息会正确发送，如果发送失败会有错误回执，从而触发重试
+```
+
+#### 监听者
+
+```java
+@Component
+public class Listener {
+
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(value = "spring.test.queue", durable = "true"),
+            exchange = @Exchange(
+                    value = "spring.test.exchange",
+                    ignoreDeclarationExceptions = "true",
+                    type = ExchangeTypes.TOPIC
+            ),
+            key = {"#.#"}))
+    public void listen(String msg){
+        System.out.println("接收到消息：" + msg);
+    }
+}
+```
+
+```
+@Componet：类上的注解，注册到Spring容器
+@RabbitListener：方法上的注解，声明这个方法是一个消费者方法，需要指定下面的属性：
+bindings：指定绑定关系，可以有多个。值是@QueueBinding的数组。@QueueBinding包含下面属性：
+value：这个消费者关联的队列。值是@Queue，代表一个队列
+exchange：队列所绑定的交换机，值是@Exchange类型
+key：队列和交换机绑定的RoutingKey
+类似listen这样的方法在一个类中可以写多个，就代表多个消费者。
+```
+
+#### 消息发送
+
+```java
+@Autowired
+private AmqpTemplate amqpTemplate;
+
+@Test
+public void testSend() throws InterruptedException {
+   String msg = "hello, Spring boot amqp";
+   this.amqpTemplate.convertAndSend("spring.test.exchange","a.b", msg);
+   // 等待10秒后再结束
+   Thread.sleep(10000);
+}
+```
+
+```tex
+convertAndSend参数说明:
+- 指定消息
+- 指定交换机、RoutingKey和消息体
+- 指定RoutingKey和消息，会向默认的交换机发送消息
+```
+
 ## 项目打包部署
 
 ### 打成Jar包

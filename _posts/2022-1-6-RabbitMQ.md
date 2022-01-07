@@ -606,7 +606,7 @@ public class Recv2 {
 
 #### 持久化
 
-如何避免消息丢失？
+> 避免消息丢失
 
 1）  消费者的ACK机制。可以防止消费者丢失消息。
 
@@ -616,17 +616,25 @@ public class Recv2 {
 
  要将消息持久化，前提是：队列、Exchange都持久化
 
-交换机持久化
+> 交换机持久化
 
  ![1527088933255](https://raw.githubusercontent.com/Kid-On-The-Road/Resources/main/笔记图片/RabbitMQ/1527088933255.png)
 
-队列持久化
+> 队列持久化
 
  ![1527088960059](https://raw.githubusercontent.com/Kid-On-The-Road/Resources/main/笔记图片/RabbitMQ/1527088960059.png)
 
-消息持久化
+> 消息持久化
 
 ![1527088984029](https://raw.githubusercontent.com/Kid-On-The-Road/Resources/main/笔记图片/RabbitMQ/1527088984029.png)
+
+### 确认/拒绝消息
+
+| 分类        | 作用     | 配置                                                         |
+| ----------- | -------- | ------------------------------------------------------------ |
+| basicAck    | 确认消息 | 第二个参数为`true`,表示批量确认当前通道中所有`deliveryTag`小于当前小的所有消息 |
+| basicNack   | 拒绝消息 | 第二个参数为`true`,表示拒绝当前通道中所有`deliveryTag`小于当前消息的所有消息,<br />第三个参数为`true`,表示当前消息再次回到队列中等待被再次消费 |
+| basicReject | 拒绝消息 | 与`basicNack`类似,但一次只能拒绝单条消息                     |
 
 ## 问题及解决
 

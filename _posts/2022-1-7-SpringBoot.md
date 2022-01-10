@@ -819,7 +819,9 @@ public class UserServiceTest {
 
 ### 整合Redis
 
-#### 依赖
+#### 单机
+
+##### 依赖
 
 ```xml
 <!-- 配置redis启动器 -->
@@ -829,7 +831,7 @@ public class UserServiceTest {
 </dependency>
 ```
 
-#### 配置Redis连接属性
+##### 配置Redis连接属性
 
 ```yml
 # 配置Redis
@@ -839,7 +841,7 @@ spring:
       port: 6379      # 端口
 ```
 
-#### 注入RedisTemplate操作Redis
+##### 注入RedisTemplate操作Redis
 
 ```java
 @RunWith(SpringRunner.class)
@@ -858,6 +860,143 @@ public class RedisTemplateTest {
         redisTemplate.delete("name");
     }
 }
+```
+
+#### 集群
+
+> 不指定连接池
+
+- 配置文件
+
+```yml
+spring:
+  redis:
+    cluster:
+      nodes:
+        - 192.168.88.3:7001
+        - 192.168.88.3:7002
+        - 192.168.88.4:7003
+        - 192.168.88.4:7004
+        - 192.168.88.6:7005
+        - 192.168.88.6:7006 
+      max-redirects: 3  # 获取失败 最大重定向次数
+    pool:
+      max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+      max-idle: 10    # 连接池中的最大空闲连接
+      max-wait: -1   # 连接池最大阻塞等待时间（使用负值表示没有限制）
+      min-idle:  5     # 连接池中的最小空闲连接
+    timeout: 6000  # 连接超时时长（毫秒）
+```
+
+- 使用
+
+```java
+@Autowired
+private RedisTemplate<String, Object> redisTemplate;
+```
+
+> 使用jedis连接池
+
+- 配置文件
+
+```yml
+spring:
+  redis:
+    password:    # 密码（默认为空）
+    timeout: 6000ms  # 连接超时时长（毫秒）
+    cluster:
+      nodes:
+        - 192.168.88.3:7001
+        - 192.168.88.3:7002
+        - 192.168.88.4:7003
+        - 192.168.88.4:7004
+        - 192.168.88.6:7005
+        - 192.168.88.6:7006 
+    jedis:
+      pool:
+        max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 10      # 连接池中的最大空闲连接
+        min-idle: 5       # 连接池中的最小空闲连接
+```
+
+- 配置类
+
+```java
+@Configuration
+public class RedisConfig {
+   @Autowired
+   private RedisConnectionFactory factory;
+   @Resource
+   private RedisTemplate<String, Object> redisTemplate;
+   @Bean
+    public RedisTemplate<String, Object> redisTemplate() {
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setConnectionFactory(factory);
+        return redisTemplate;
+    }
+}
+```
+
+- 使用
+
+```java
+@Autowired
+private RedisTemplate<String, Object> redisTemplate;
+```
+
+> 使用lettuce连接池
+
+- 配置文件
+
+```yml
+spring:
+  redis:
+    timeout: 6000ms
+    password: 
+    cluster:
+      max-redirects: 3  # 获取失败 最大重定向次数 
+      nodes:
+        - 192.168.88.3:7001
+        - 192.168.88.3:7002
+        - 192.168.88.4:7003
+        - 192.168.88.4:7004
+        - 192.168.88.6:7005
+        - 192.168.88.6:7006 
+    lettuce:
+      pool:
+        max-active: 1000  #连接池最大连接数（使用负值表示没有限制）
+        max-idle: 10 # 连接池中的最大空闲连接
+        min-idle: 5 # 连接池中的最小空闲连接
+        max-wait: -1 # 连接池最大阻塞等待时间（使用负值表示没有限制）
+```
+
+- 配置类
+
+```java
+@Configuration
+@AutoConfigureAfter(RedisAutoConfiguration.class)
+public class RedisConfig {
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+    @Bean
+    public RedisTemplate<String, Object> redisCacheTemplate(LettuceConnectionFactory redisConnectionFactory) {
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        return redisTemplate;
+    }
+}
+```
+
+- 使用
+
+```java
+@Autowired
+private RedisTemplate<String, Object> redisTemplate;
 ```
 
 ### 整合RabbitMQ

@@ -931,10 +931,11 @@ public class RedisConfig {
    private RedisTemplate<String, Object> redisTemplate;
    @Bean
     public RedisTemplate<String, Object> redisTemplate() {
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
+       Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        redisTemplate.setKeySerializer(serializer);
+        redisTemplate.setValueSerializer(serializer);
+        redisTemplate.setHashKeySerializer(serializer);
+        redisTemplate.setHashValueSerializer(serializer);
         redisTemplate.setConnectionFactory(factory);
         return redisTemplate;
     }
@@ -984,8 +985,11 @@ public class RedisConfig {
     private RedisTemplate<String, Object> redisTemplate;
     @Bean
     public RedisTemplate<String, Object> redisCacheTemplate(LettuceConnectionFactory redisConnectionFactory) {
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        redisTemplate.setKeySerializer(serializer);
+        redisTemplate.setValueSerializer(serializer);
+        redisTemplate.setHashKeySerializer(serializer);
+        redisTemplate.setHashValueSerializer(serializer);
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
     }

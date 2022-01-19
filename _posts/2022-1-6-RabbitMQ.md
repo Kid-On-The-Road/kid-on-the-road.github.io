@@ -636,6 +636,103 @@ public class Recv2 {
 | basicNack   | 拒绝消息 | 第二个参数为`true`,表示拒绝当前通道中所有`deliveryTag`小于当前消息的所有消息,<br />第三个参数为`true`,表示当前消息再次回到队列中等待被再次消费 |
 | basicReject | 拒绝消息 | 与`basicNack`类似,但一次只能拒绝单条消息                     |
 
+## 使用案例
+
+### 生产者
+
+```java
+@RestController
+public class PublishRest {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @GetMapping(path = "publish")
+    public boolean publish(String exchange, String routing, String data) {
+        rabbitTemplate.convertAndSend(exchange, routing, data);
+        return true;
+    }
+}
+```
+
+### 消费者
+
+> queue已存在
+
+```java
+/**
+ * 当队列已经存在时，直接指定队列名的方式消费
+ *
+ * @param data
+ */
+@RabbitListener(queues = "topic.a")
+public void consumerExistsQueue(String data) {
+    System.out.println("consumerExistsQueue: " + data);
+}
+```
+
+> queue不存在
+
+```java
+/**
+ * 队列不存在时，需要创建一个队列，并且与exchange绑定
+ * autoDelete 属性为 false 时,并且队列已经存在时,可以直接指定队列名
+ * autoDelete 属性为 true 时，没有消费者队列就会自动删除,此时需要创建 Queue，并建立与 Exchange 的绑定关系
+ * @QueueBinding注解的三个属性：
+ * value: @Queue 注解，用于声明队列，value 为 queueName, durable 表示队列是否持久化, autoDelete 表示没有消费者之后队列是否自动删除
+ * exchange: @Exchange 注解，用于声明 exchange， type 指定消息投递策略，我们这里用的 topic 方式
+ * key: 在 topic 方式下，这个就是我们熟知的 routingKey
+ */
+@RabbitListener(bindings = @QueueBinding(
+        value = @Queue(value = "topic.n1", durable = "false", autoDelete = "true"),
+        exchange = @Exchange(value = "topic.e", type = ExchangeTypes.TOPIC),
+        key = "r"))
+public void consumerNoQueue(String data) {
+    System.out.println("consumerNoQueue: " + data);
+}
+```
+
+> ack
+
+```java
+/**
+ * 手动ack
+ * ack 方式(noack, auto, manual)
+ * deliveryTag: 相当于消息的唯一标识，用于 mq 辨别是哪个消息被 ack/nak 了
+ * channel: mq 和 consumer 之间的管道，通过它来 ack/nak
+ */
+@RabbitListener(bindings = @QueueBinding(value = @Queue(value = "topic.n3", durable = "false", autoDelete = "true"),
+        exchange = @Exchange(value = "topic.e", type = ExchangeTypes.TOPIC), key = "r"), ackMode = "MANUAL")
+public void consumerDoAck(String data, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag, Channel channel)
+        throws IOException {
+    System.out.println("consumerDoAck: " + data);
+    if (data.contains("success")) {
+        // 正确消费时，通过调用 basicAck 方法即可,RabbitMQ的ack机制中，第二个参数返回true，表示需要将这条消息投递给其他的消费者重新消费
+        channel.basicAck(deliveryTag, false);
+    } else {
+        //消费失败时，需要将消息重新塞入队列，等待重新消费时，可以使用 basicNack,第三个参数true，表示这个消息会重新进入队列
+        channel.basicNack(deliveryTag, false, true);
+    }
+}
+```
+
+> 并发消费
+
+```java
+/**
+* 注解中的concurrency = "4"属性，表示固定 4 个消费者；
+* 除了上面这种赋值方式之外，还有一种 m-n 的格式，表示 m 个并行消费者，最多可以有 n 个;
+*/
+@RabbitListener(bindings = @QueueBinding(value = @Queue(value = "topic.n4", durable = "false", autoDelete = "true"),
+        exchange = @Exchange(value = "topic.e", type = ExchangeTypes.TOPIC), key = "r"), concurrency = "4")
+public void multiConsumer(String data) {
+    System.out.println("multiConsumer: " + data);
+}
+```
+
+
+
+
+
 ## 问题及解决
 
 ### 消息丢失

@@ -1144,27 +1144,22 @@ java -jar xxx.jar
 
 ```groovy
 buildscript {
+    ext {
+        springBootVersion = '2.5.2'
+    }
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        mavenLocal()
+        mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
     }
 }
 
-
-apply plugin: "com.github.johnrengelman.shadow"
-    apply plugin: 'java'
-    shadowJar {
-        archiveBaseName.set('shadow')
-        archiveClassifier.set('')
-        archiveVersion.set('')
-        manifest {
-            attributes 'Main-Class': 'com.Application'
-        }
-        zip64 true
+apply plugin: 'org.springframework.boot'
+    springBoot {
+        mainClass = "com.SpringBootApplication"
     }
 ```
 
@@ -1241,28 +1236,10 @@ public class WebServletInitializer extends SpringBootServletInitializer {
 > gradle
 
 ```groovy
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
-    }
+apply plugin: "war"
+//自定义war包名
+war {
+    archiveName("testJboss.war")
 }
-
-
-  apply plugin: "com.github.johnrengelman.shadow"
-    apply plugin: 'java'
-    shadowJar {
-        archiveBaseName.set('shadow')
-        archiveClassifier.set('')
-        archiveVersion.set('')
-        manifest {
-            attributes 'Main-Class': 'com.Application'
-        }
-        zip64 true
-    }
 ```
 

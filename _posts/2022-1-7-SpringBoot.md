@@ -1161,6 +1161,9 @@ apply plugin: 'org.springframework.boot'
     springBoot {
         mainClass = "com.SpringBootApplication"
     }
+    bootJar{
+        archiveFileName = "jboss.jar"
+    }
 ```
 
 ### 打成war包

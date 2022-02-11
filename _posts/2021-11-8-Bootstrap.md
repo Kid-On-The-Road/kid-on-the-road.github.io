@@ -1012,3 +1012,32 @@ bootstrap中文官网：http://www.bootcss.com
 </body>
 </html>
 ```
+
+## 页面加载动画
+
+```html
+<div class="modal fade" id="loadingModal">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h5>请稍后...</h5>
+    </div>
+</div>
+```
+
+```js
+//显示
+$("#loadingModal").modal('show');
+//隐藏
+ $("#loadingModal").modal('hide');
+//使点击空白处遮罩层不会消失
+$("#loadingModal").modal({backdrop:'static'});
+//按Tab键遮罩层不会消失 ，默认值为true
+$("#loadingModal").modal({keyboard:false});
+//也可以一起运用
+//backdrop 为 static 时，点击模态对话框的外部区域不会将其关闭。
+//keyboard 为 false 时，按下 Esc 键不会关闭 Modal。
+$('#loadingModal').modal({backdrop: 'static', keyboard: false});
+```
+

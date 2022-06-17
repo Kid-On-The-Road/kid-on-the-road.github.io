@@ -135,3 +135,84 @@ meta: ""
 | jdbcMaxCheckoutTime      | 连接被取出使用的最长时间，超过时间会被强制回收。 默认为20000（20秒） |
 | jdbcMaxWaitTime          | 这是一个底层配置，让连接池可以在长时间无法获得连接时， 打印一条日志，并重新尝试获取一个连接。（避免因为错误配置导致沉默的操作失败）。 默认为20000（20秒） |
 
+## SpringBoot 整合Activiti
+
+### 依赖
+
+```xml
+<!-- Activiti 6.0 -->
+<dependency>
+	<groupId>org.activiti</groupId>
+	<artifactId>activiti-spring-boot-starter-basic</artifactId>
+	<version>6.0.0</version>
+</dependency>
+```
+
+```groovy
+//Mysql驱动包
+implementation 'mysql:mysql-connector-java:8.0.28'
+//activiti依赖
+implementation ('org.activiti:activiti-spring-boot-starter-basic:6.0.0') {
+    //排除mybatis
+    exclude group: 'org.mybatis'
+}
+
+```
+
+### 配置文件
+
+```yml
+spring:
+  #数据库配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/spring?serverTimezone=UTC&characterEncoding=utf8&useSSL=false
+    username: root
+    password: Root@1234
+    driver-class-name:  com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update  
+    show-sql: true  
+
+  activiti: 
+    # 自动部署验证设置:true-开启（默认）、false-关闭
+    check-process-definitions: false
+    #配置项可以设置流程引擎启动和关闭时数据库执行的策略
+    database-schema-update: true
+    #保存历史数据级别设置为full最高级别，便于历史数据的追溯
+    history-level: full
+```
+
+> spring.activiti.database-schema-update配置项
+
+设置流程引擎启动和关闭时数据库执行的策略
+
+| 模式        | 解释                                                         |
+| ----------- | ------------------------------------------------------------ |
+| false       | false为默认值，设置为该值后，Activiti在启动时，会对比数据库表中保存的版本，如果没有表或者版本不匹配时，将在启动时抛出异常。 |
+| true        | 设置为该值后，Activiti会对数据库中所有的表进行更新，如果表不存在，则Activiti会自动创建。 |
+| create-drop | Activiti启动时，会执行数据库表的创建操作，在Activiti关闭时，执行数据库表的删除操作。 |
+| drop-create | Activiti启动时，执行数据库表的删除操作在Activiti关闭时，会执行数据库表的创建操作。 |
+
+==注意==
+
+第一次启动程序后，数据库会自动生成关于activiti28张表，可以关闭程序，修改配置项
+
+```yml
+#每次应用启动不检查Activiti数据表是否存在及版本号是否匹配，提升应用启动速度
+spring.activiti.database-schema-update=false
+```
+
+> spring.activiti.history-level 配置项
+
+对于历史数据，保存到何种粒度，Activiti提供了history-level属性对其进行配置。history-level属性有点像log4j的日志输出级别
+
+| 属性值   | 解释                                                         |
+| -------- | ------------------------------------------------------------ |
+| none     | 不保存任何的历史数据，因此，在流程执行过程中，这是最高效的。 |
+| activity | 级别高于none，保存流程实例与流程行为，其他数据不保存。       |
+| audit    | 除activity级别会保存的数据外，还会保存全部的流程任务及其属性。audit为history的默认值。 |
+| full     | 保存历史数据的最高级别，除了会保存audit级别的数据外，还会保存其他全部流程相关的细节数据，包括一些流程参数等。 |
+

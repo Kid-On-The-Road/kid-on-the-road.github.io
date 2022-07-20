@@ -9,9 +9,9 @@ meta: ""
 
 ---
 
-# Activiti7基础
+## Activiti7基础
 
-# 一、工作流介绍
+## 一、工作流介绍
 
 ## 1.1 概念
 
@@ -3680,3 +3680,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 }
 ```
 
+| C_ACT_RATE_TASK_DEF | APPROVE_USER_TYPE | 审批人设置类型（DEPT_TYPE:指定部门类型，DEPT_ID:指定部门） |
+| ------------------- | ----------------- | ---------------------------------------------------------- |
+| C_ACT_RATE_TASK_DEF | DEPT_ID           | 指定部门ID                                                 |
+| C_ACT_RATE_TASK_DEF | DEPT_TYPE         | 指定部门类型（SALES_DEPT: 营业部，MARKET_DEPT:营销中心）   |
+| C_ACT_RATE_TASK_DEF | ID                | 任务ID                                                     |
+| C_ACT_RATE_TASK_DEF | NAME              | 任务名称                                                   |
+| C_ACT_RATE_TASK_DEF | PID               | 所属流程ID                                                 |
+| C_ACT_RATE_TASK_DEF | POST_ID           | 指定岗位ID                                                 |
+| C_ACT_RATE_TASK_DEF | SEQ               | 顺序                                                       |
+| C_ACT_RATE_TASK_DEF | TYPE              | 任务类型（APPLY：申请节点，APPROVE：审批节点）             |

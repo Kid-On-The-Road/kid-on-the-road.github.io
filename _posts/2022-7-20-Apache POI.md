@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Apache POI"
-subtitle: "Apache POI文档"
+title: "Apache-POI"
+subtitle: "Apache-POI文档"
 categories: 报表
-tags: [Apache POI]
+tags: [Apache-POI]
 author: "Kid-On-The-Road"
 meta: ""
 
